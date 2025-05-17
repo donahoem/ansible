@@ -13,6 +13,7 @@ from ansible.errors import AnsibleError, AnsibleAssertionError
 from ansible.module_utils.six import text_type
 from ansible.module_utils.common.text.converters import to_text, to_bytes
 from ansible.utils.display import Display
+import secrets
 
 PASSLIB_E = None
 PASSLIB_AVAILABLE = False
@@ -49,7 +50,7 @@ def random_password(length=DEFAULT_PASSWORD_LENGTH, chars=C.DEFAULT_PASSWORD_CHA
     if seed is None:
         random_generator = random.SystemRandom()
     else:
-        random_generator = random.Random(seed)
+        random_generator = secrets.SystemRandom().Random(seed)
     return u''.join(random_generator.choice(chars) for dummy in range(length))
 
 
