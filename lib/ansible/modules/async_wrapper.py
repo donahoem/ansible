@@ -20,6 +20,7 @@ import syslog
 import multiprocessing
 
 from ansible.module_utils.common.text.converters import to_text, to_bytes
+from security import safe_command
 
 syslog.openlog('ansible-%s' % os.path.basename(__file__))
 syslog.syslog(syslog.LOG_NOTICE, 'Invoked with %s' % " ".join(sys.argv[1:]))
@@ -166,8 +167,7 @@ def _run_module(wrapped_cmd, jid):
         interpreter = _get_interpreter(cmd[0])
         if interpreter:
             cmd = interpreter + cmd
-        script = subprocess.Popen(
-            cmd,
+        script = safe_command.run(subprocess.Popen, cmd,
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
